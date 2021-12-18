@@ -52,8 +52,4 @@ contract Tether {
         emit Approval(msg.sender, _spender, _value);
         return true;
     }
-
-    function balanceOf(address getter) public {
-        return balanceOf[getter];
-    }
 }
