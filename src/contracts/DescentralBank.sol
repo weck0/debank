@@ -37,6 +37,16 @@ contract DecentralBank {
         isStaking[msg.sender] = true;
     }
 
+    function unstakeTokens() public {
+        uint256 balance = stakingBalance[msg.sender];
+        require(balance > 0, "staking balance cannot be less than 0");
+        require(isStaking[msg.sender]);
+
+        tether.transfer(msg.sender, balance);
+        stakingBalance[msg.sender] = 0;
+        isStaking[msg.sender] = false;
+    }
+
     function issueTokens() public {
         require(msg.sender == owner, "The caller must be the owner");
 
