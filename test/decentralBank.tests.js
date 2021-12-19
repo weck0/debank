@@ -1,3 +1,5 @@
+//const { assert } = require('console');
+
 const Tether = artifacts.require('Tether');
 const RWD = artifacts.require('RWD');
 const DecentralBank = artifacts.require('DecentralBank');
@@ -87,6 +89,24 @@ contract('DecentralBank', ([owner, customer]) => {
                 // Ensure only owner can issueTokens
                 await decentralBank.issueTokens({from: customer}).should.be.rejected;
 
+                // Unstake tokens
+                await decentralBank.unstakeTokens({from: customer})
+
+                // Ensure customer tokens have been unstaked
+                result = await decentralBank.stakingBalance(customer)
+                assert.equal(result, 0, 'customer staking balance should be 0')
+
+                // Check if customer is no longer staking
+                result = await decentralBank.isStaking(customer)
+                assert.equal(result, false, 'customer is not staking')
+
+                // Check updated balance of customer
+                result = await tether.balanceOf(customer)
+                assert.equal(result.toString(), toWei('100'), 'customer mock wallet after unstaking')
+
+                // Check updated balance of decentralBank
+                result = await tether.balanceOf(decentralBank.address)
+                assert.equal(result.toString(), toWei('0'), 'checking decentralBank balance')
             })
         })
     });
