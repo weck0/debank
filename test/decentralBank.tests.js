@@ -7,7 +7,7 @@ require('chai')
 .should()
 
 contract('DecentralBank', ([owner, customer]) => {
-    let tether, rwd
+    let tether, rwd, decentralBank
 
     let toWei = (number) => web3.utils.toWei(number, 'ether');
     
@@ -44,6 +44,18 @@ contract('DecentralBank', ([owner, customer]) => {
         it('matches name successfully', async () => {
             const symbol = await rwd.symbol()
             assert.equal(symbol, 'RWD');
+        })
+    });
+
+    describe('Decentral Bank Deployement', async () => {
+        it('matches name successfully', async () => {
+            const name = await decentralBank.name()
+            assert.equal(name, 'Decentral Bank');
+        })
+
+        it('contract has tokens', async () => {
+            let balance = await rwd.balanceOf(decentralBank.address)
+            assert.equal(balance, '1000000000000000000000000');
         })
     });
     
