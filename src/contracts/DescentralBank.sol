@@ -17,6 +17,7 @@ contract DecentralBank {
     constructor(RWD _rwd, Tether _tether) public {
         rwd = _rwd;
         tether = _tether;
+        owner = msg.sender;
     }
 
     function depositTokens(uint256 _amount) public {
@@ -37,12 +38,12 @@ contract DecentralBank {
     }
 
     function issueTokens() public {
-        require(msg.sender = owner, "The caller must be the owner");
+        require(msg.sender == owner, "The caller must be the owner");
 
-        for (uint i=0, i < stakers.length, i++) {
+        for (uint256 i = 0; i < stakers.length; i++) {
             address recipient = stakers[i];
-            uint balance = stakingBalance[recipient];
-            if(balance > 0) {
+            uint256 balance = stakingBalance[recipient] / 9;
+            if (balance > 0) {
                 rwd.transfer(recipient, balance);
             }
         }
