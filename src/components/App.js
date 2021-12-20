@@ -32,8 +32,11 @@ class App extends Component {
         })
     }
 
-    unstakeTokens = (amount) => {
+    unstakeTokens = () => {
         this.setState({loading: true})
+        this.state.decentralBank.methods.unstakeTokens().send({from: this.state.account}).on('transactionHash', (hash) => {
+            this.setState({loading: false})
+        })
     }
 
     async UNSAFE_componentWillMount() {
@@ -105,6 +108,7 @@ class App extends Component {
             rwdBalance = {this.state.rwdBalance}
             stakingBalance = {this.state.stakingBalance}
             stakeTokens={this.stakeTokens}
+            unstakeTokens={this.unstakeTokens}
             />
         }
         return(
