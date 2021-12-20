@@ -52,7 +52,6 @@ class App extends Component {
             this.setState({ tether })
             let tetherBalance = await tether.methods.balanceOf(this.state.account).call()
             this.setState({ tetherBalance: tetherBalance.toString() })
-            console.log(this.state.tetherBalance, 'tether balance')
         } else {
             window.alert('Error ! Tether contract not deployed - no detected network')
         }
@@ -64,7 +63,6 @@ class App extends Component {
             this.setState({ rwd })
             let rwdBalance = await rwd.methods.balanceOf(this.state.account).call()
             this.setState({ rwdBalance: rwdBalance.toString() })
-            console.log(this.state.rwdBalance, 'rwd balance')
         } else {
             window.alert('Error ! Tether contract not deployed - no detected network')
         }
@@ -76,7 +74,6 @@ class App extends Component {
             this.setState({ decentralBank })
             let stakingBalance = await decentralBank.methods.stakingBalance(this.state.account).call()
             this.setState({ stakingBalance: stakingBalance.toString() })
-            console.log(this.state.stakingBalance, 'decentralBank balance')
         } else {
             window.alert('Error ! Tether contract not deployed - no detected network')
         }
@@ -86,6 +83,16 @@ class App extends Component {
     }
 
     render() {
+        let content
+        if(this.state.loading) {
+            content = <p id='loader' className='text-center' style={{margin:'30px'}}> LOADING...</p>
+        } else {
+            content = <Main 
+            tetherBalance = {this.state.tetherBalance}
+            rwdBalance = {this.state.rwdBalance}
+            stakingBalance = {this.state.stakingBalance}
+            />
+        }
         return(
             <div>
                 <Navbar account={this.state.account} />
@@ -93,7 +100,7 @@ class App extends Component {
                     <div className='row'>
                         <main role='main' className='col-lg-12 ml-auto mr-auto' style={{maxWidth:'600px', minHeight:'100vm'}}>
                             <div>
-                                <Main />
+                               {content}
                             </div>
                         </main>
                     </div>
